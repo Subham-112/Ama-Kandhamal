@@ -3,57 +3,72 @@ import { Menu, X, Globe } from "lucide-react";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobile] = useState(window.innerWidth <= 768);
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+      <div
+        style={{ height: isMobile ? "80px" : "100px" }}
+        className="flex justify-center items-center px-4 sm:px-6 lg:px-8"
+      >
+        <div
+          style={{ width: "90%" }}
+          className="flex justify-between items-center"
+        >
           {/* Logo */}
           <div className="flex items-center">
-            <img src="/logo.png" alt="AMA KANDHAMAL" className="h-12 w-auto" />
+            <img
+              src="/logo.png"
+              alt="AMA KANDHAMAL"
+              className="w-auto"
+              style={{ height: isMobile ? "40px" : "60px" }}
+            />
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
+          <nav className="flex items-center hidden md:flex space-x-8">
             <a
               href="#home"
-              className="text-gray-700 hover:text-primary-green transition-colors font-medium"
+              style={{ fontSize: "18px" }}
+              className="text-gray-700 hover:text-primary-green transition-colors"
             >
               Home
             </a>
             <a
               href="#services"
-              className="text-gray-700 hover:text-primary-green transition-colors font-medium"
+              style={{ fontSize: "18px" }}
+              className="text-gray-700 hover:text-primary-green transition-colors"
             >
               Services
             </a>
             <a
               href="#about"
-              className="text-gray-700 hover:text-primary-green transition-colors font-medium"
+              style={{ fontSize: "18px" }}
+              className="text-gray-700 hover:text-primary-green transition-colors"
             >
               About Us
             </a>
             <a
               href="#careers"
-              className="text-gray-700 hover:text-primary-green transition-colors font-medium"
+              style={{ fontSize: "18px" }}
+              className="text-gray-700 hover:text-primary-green transition-colors"
             >
               Careers
             </a>
+            {/* Language and Auth */}
+            <div className="hidden md:flex items-center space-x-4">
+              <button className="flex items-center text-gray-700 hover:text-primary-green transition-colors">
+                <Globe className="h-5 w-5 mr-1" />
+                <span className="text-lg font-medium">EN</span>
+              </button>
+              <button className="bg-primary-green text-white px-6 py-2 rounded-lg text-lg font-medium hover:bg-secondary-green transition-colors">
+                LOGIN
+              </button>
+              <button className="border border-gray-300 text-gray-700 px-6 py-2 rounded-lg text-lg font-medium hover:border-primary-green hover:text-primary-green transition-colors">
+                Sign up
+              </button>
+            </div>
           </nav>
-
-          {/* Language and Auth */}
-          <div className="hidden md:flex items-center space-x-4">
-            <button className="flex items-center text-gray-700 hover:text-primary-green transition-colors">
-              <Globe className="h-4 w-4 mr-1" />
-              <span className="text-sm font-medium">EN</span>
-            </button>
-            <button className="bg-primary-green text-white px-4 py-2 rounded-lg font-medium hover:bg-secondary-green transition-colors">
-              LOGIN
-            </button>
-            <button className="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium hover:border-primary-green hover:text-primary-green transition-colors">
-              Sign up
-            </button>
-          </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
@@ -62,9 +77,9 @@ const Header = () => {
               className="text-gray-700 hover:text-primary-green transition-colors"
             >
               {isMenuOpen ? (
-                <X className="h-6 w-6" />
+                <X size={isMobile ? 30 : 24} />
               ) : (
-                <Menu className="h-6 w-6" />
+                <Menu size={isMobile ? 30 : 24} />
               )}
             </button>
           </div>

@@ -2,6 +2,28 @@ import React from 'react'
 import { Clock, DollarSign, Shield, Headphones } from 'lucide-react'
 
 const WhyChooseUs = () => {
+  const [isMobile] = React.useState(window.innerWidth <= 768);
+  const [isVisible, setIsVisible] = React.useState(false);
+  const sectionRef = React.useRef();
+
+  // Intersection Observer for triggering animations
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [isVisible]);
+
   const features = [
     {
       icon: Clock,
@@ -26,9 +48,13 @@ const WhyChooseUs = () => {
   ]
 
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+    <section ref={sectionRef} className="flex justify-center py-10 bg-white">
+      <div className=" px-4 sm:px-6 lg:px-8" style={{width: "90%"}}>
+        <div className={`text-center mb-10 transition-all duration-800 ${
+          isVisible 
+            ? 'animate-fade-in-up opacity-100' 
+            : 'opacity-0 translate-y-8'
+        }`}>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Why Choose Us?
           </h2>
@@ -40,12 +66,25 @@ const WhyChooseUs = () => {
             return (
               <div 
                 key={index}
-                className="text-center p-6 rounded-xl bg-light-gray hover:shadow-lg transition-all duration-300 hover:transform hover:scale-105"
+                className={`text-center p-6 rounded-xl bg-light-gray hover:shadow-lg transition-all duration-500 hover:transform hover:scale-105 hover:-translate-y-2 ${
+                  isVisible 
+                    ? 'animate-fade-in-up opacity-100' 
+                    : 'opacity-0 translate-y-8'
+                }`}
+                style={{
+                  animationDelay: `${(index + 1) * 0.2}s`,
+                  transitionDelay: isVisible ? `${(index + 1) * 0.1}s` : '0s'
+                }}
               >
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-green text-white rounded-full mb-4">
-                  <IconComponent className="h-8 w-8" />
+                <div className={`inline-flex items-center justify-center w-16 h-16 bg-primary-green text-white rounded-full mb-4 transition-all duration-300 hover:scale-110 hover:rotate-12 ${
+                  isVisible ? 'animate-bounce-gentle' : ''
+                }`}
+                style={{
+                  animationDelay: `${(index + 2) * 0.3}s`
+                }}>
+                  <IconComponent size={isMobile ? 24 : 30} />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                <h3 className="text-xl font-semibold text-gray-900 mb-3 transition-colors duration-300 hover:text-primary-green">
                   {feature.title}
                 </h3>
                 <p className="text-gray-600 leading-relaxed">

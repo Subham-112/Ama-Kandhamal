@@ -2,12 +2,33 @@ import React from 'react'
 import { Star, ThumbsUp, ThumbsDown } from 'lucide-react'
 
 const Testimonials = () => {
+  const [isVisible, setIsVisible] = React.useState(false);
+  const sectionRef = React.useRef();
+
+  // Intersection Observer for triggering animations
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [isVisible]);
+
   const testimonials = [
     {
       name: "Sophia Carter",
       service: "Sophia's Quick Delivery",
       rating: 5,
-      comment: "SwiftDash has completely changed how I shop for groceries. The delivery is incredibly fast, and the app is so easy to use. Highly recommend!",
+      comment: "AMA KANDHAMAL has completely changed how I shop for groceries. The delivery is incredibly fast, and the app is so easy to use. Highly recommend!",
       likes: 12,
       dislikes: 2,
       avatar: "👩‍💼"
@@ -16,7 +37,7 @@ const Testimonials = () => {
       name: "Ethan Kim",
       service: "Ethan's Reliable Service",
       rating: 5,
-      comment: "SwiftDash has completely changed how I shop for groceries. The delivery is incredibly fast, and the app is so easy to use. Highly recommend!",
+      comment: "AMA KANDHAMAL has completely changed how I shop for groceries. The delivery is incredibly fast, and the app is so easy to use. Highly recommend!",
       likes: 12,
       dislikes: 2,
       avatar: "👨‍💻"
@@ -25,7 +46,7 @@ const Testimonials = () => {
       name: "Emma Wilson",
       service: "Emma's Fast Service",
       rating: 5,
-      comment: "SwiftDash has completely changed how I shop for groceries. The delivery is incredibly fast, and the app is so easy to use. Highly recommend!",
+      comment: "AMA KANDHAMAL has completely changed how I shop for groceries. The delivery is incredibly fast, and the app is so easy to use. Highly recommend!",
       likes: 12,
       dislikes: 2,
       avatar: "👩‍🎨"
@@ -34,7 +55,7 @@ const Testimonials = () => {
       name: "James Brown",
       service: "James's Reliable Service",
       rating: 5,
-      comment: "SwiftDash has completely changed how I shop for groceries. The delivery is incredibly fast, and the app is so easy to use. Highly recommend!",
+      comment: "AMA KANDHAMAL has completely changed how I shop for groceries. The delivery is incredibly fast, and the app is so easy to use. Highly recommend!",
       likes: 12,
       dislikes: 2,
       avatar: "👨‍🔧"
@@ -43,7 +64,7 @@ const Testimonials = () => {
       name: "Maya Patel",
       service: "Maya's Quick Service",
       rating: 5,
-      comment: "SwiftDash has completely changed how I shop for groceries. The delivery is incredibly fast, and the app is so easy to use. Highly recommend!",
+      comment: "AMA KANDHAMAL has completely changed how I shop for groceries. The delivery is incredibly fast, and the app is so easy to use. Highly recommend!",
       likes: 12,
       dislikes: 2,
       avatar: "👩‍⚕️"
@@ -51,9 +72,13 @@ const Testimonials = () => {
   ]
 
   return (
-    <section className="py-20 bg-light-gray">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+    <section ref={sectionRef} className="flex justify-center py-10 lg:py-20 bg-light-gray">
+      <div style={{ width: "90%" }} className="px-4 sm:px-6 lg:px-8">
+        <div className={`text-center mb-5 transition-all duration-800 ${
+          isVisible 
+            ? 'animate-fade-in-up opacity-100' 
+            : 'opacity-0 translate-y-8'
+        }`}>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             What Our Customers Are Saying
           </h2>
@@ -66,15 +91,28 @@ const Testimonials = () => {
           {testimonials.map((testimonial, index) => (
             <div 
               key={index}
-              className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 hover:transform hover:-translate-y-1"
+              className={`bg-white p-6 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-500 hover:transform hover:-translate-y-2 hover:scale-105 ${
+                isVisible 
+                  ? 'animate-fade-in-up opacity-100' 
+                  : 'opacity-0 translate-y-8'
+              }`}
+              style={{
+                animationDelay: `${(index + 1) * 0.1}s`,
+                transitionDelay: isVisible ? `${(index + 1) * 0.05}s` : '0s'
+              }}
             >
               {/* Avatar */}
               <div className="flex items-center mb-4">
-                <div className="text-4xl mr-3">
+                <div className={`text-4xl mr-3 transition-all duration-300 hover:scale-110 ${
+                  isVisible ? 'animate-bounce-gentle' : ''
+                }`}
+                style={{
+                  animationDelay: `${(index + 2) * 0.2}s`
+                }}>
                   {testimonial.avatar}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">{testimonial.name}</h3>
+                  <h3 className="font-semibold text-gray-900 hover:text-primary-green transition-colors duration-300">{testimonial.name}</h3>
                   <p className="text-sm text-primary-green">{testimonial.service}</p>
                 </div>
               </div>
@@ -82,7 +120,15 @@ const Testimonials = () => {
               {/* Rating */}
               <div className="flex items-center mb-4">
                 {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
+                  <Star 
+                    key={i} 
+                    className={`h-4 w-4 text-yellow-400 fill-current transition-all duration-300 hover:scale-125 ${
+                      isVisible ? 'animate-twinkle' : ''
+                    }`}
+                    style={{
+                      animationDelay: `${(index + i + 3) * 0.1}s`
+                    }}
+                  />
                 ))}
               </div>
 
@@ -93,12 +139,12 @@ const Testimonials = () => {
 
               {/* Likes/Dislikes */}
               <div className="flex items-center justify-between text-sm text-gray-500">
-                <div className="flex items-center">
-                  <ThumbsUp className="h-4 w-4 mr-1" />
+                <div className="flex items-center hover:text-primary-green transition-colors duration-300 cursor-pointer">
+                  <ThumbsUp className="h-4 w-4 mr-1 hover:scale-110 transition-transform duration-300" />
                   <span>{testimonial.likes}</span>
                 </div>
-                <div className="flex items-center">
-                  <ThumbsDown className="h-4 w-4 mr-1" />
+                <div className="flex items-center hover:text-red-500 transition-colors duration-300 cursor-pointer">
+                  <ThumbsDown className="h-4 w-4 mr-1 hover:scale-110 transition-transform duration-300" />
                   <span>{testimonial.dislikes}</span>
                 </div>
               </div>
